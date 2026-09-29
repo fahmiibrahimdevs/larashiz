@@ -24,48 +24,85 @@ new #[Layout('layouts.guest')] class extends Component
     }
 }; ?>
 
-<div>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+<div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
+    <div class="login-brand">
+        <img src="{{ asset('assets/img/stisla-fill.svg') }}" alt="logo" width="100" class="shadow-light rounded-circle">
+    </div>
 
-    <form wire:submit="login">
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="form.email" id="email" class="block mt-1 w-full" type="email" name="email" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('form.email')" class="mt-2" />
+    <div class="card card-primary">
+        <div class="card-header">
+            <h4>Login</h4>
         </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input wire:model="form.password" id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('form.password')" class="mt-2" />
-        </div>
-
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember" class="inline-flex items-center">
-                <input wire:model="form.remember" id="remember" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}" wire:navigate>
-                    {{ __('Forgot your password?') }}
-                </a>
+        <div class="card-body">
+            @if (session('status'))
+                <div class="alert alert-info alert-dismissible show fade">
+                    <div class="alert-body">
+                        <button class="close" data-dismiss="alert">
+                            <span>&times;</span>
+                        </button>
+                        {{ session('status') }}
+                    </div>
+                </div>
             @endif
 
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
+            <form wire:submit="login">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input wire:model="form.email" id="email" type="email"
+                        class="form-control @error('form.email') is-invalid @enderror" name="email" tabindex="1"
+                        required autofocus autocomplete="username">
+                    @error('form.email')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <div class="d-block">
+                        <label for="password" class="control-label">Password</label>
+                        @if (Route::has('password.request'))
+                            <div class="float-right">
+                                <a href="{{ route('password.request') }}" class="text-small" wire:navigate>
+                                    Lupa Password?
+                                </a>
+                            </div>
+                        @endif
+                    </div>
+                    <input wire:model="form.password" id="password" type="password"
+                        class="form-control @error('form.password') is-invalid @enderror" name="password" tabindex="2"
+                        required autocomplete="current-password">
+                    @error('form.password')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                        <input wire:model="form.remember" type="checkbox" name="remember" class="custom-control-input"
+                            tabindex="3" id="remember-me">
+                        <label class="custom-control-label" for="remember-me">Ingat Saya</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4"
+                        wire:loading.attr="disabled">
+                        <span wire:loading.remove>Login</span>
+                        <span wire:loading><i class="fas fa-spinner fa-spin"></i> Memproses...</span>
+                    </button>
+                </div>
+            </form>
         </div>
-    </form>
+    </div>
+
+    <div class="mt-4 text-muted text-center">
+        Belum punya akun? <a href="{{ route('register') }}" wire:navigate>Daftar Sekarang</a>
+    </div>
+    <div class="simple-footer">
+        Copyright &copy; {{ config('app.name', 'Larashiz') }} {{ date('Y') }}
+    </div>
 </div>

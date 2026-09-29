@@ -17,9 +17,6 @@ new #[Layout('layouts.guest')] class extends Component
             'email' => ['required', 'string', 'email'],
         ]);
 
-        // We will send the password reset link to this user. Once we have attempted
-        // to send the link, we will examine the response then see the message we
-        // need to show to the user. Finally, we'll send out a proper response.
         $status = Password::sendResetLink(
             $this->only('email')
         );
@@ -36,26 +33,58 @@ new #[Layout('layouts.guest')] class extends Component
     }
 }; ?>
 
-<div>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+<div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
+    <div class="login-brand">
+        <img src="{{ asset('assets/img/stisla-fill.svg') }}" alt="logo" width="100" class="shadow-light rounded-circle">
     </div>
 
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
-
-    <form wire:submit="sendPasswordResetLink">
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+    <div class="card card-primary">
+        <div class="card-header">
+            <h4>Lupa Password</h4>
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Email Password Reset Link') }}
-            </x-primary-button>
+        <div class="card-body">
+            <p class="text-muted">Masukkan email Anda, kami akan mengirimkan tautan reset password ke email Anda.</p>
+
+            @if (session('status'))
+                <div class="alert alert-success alert-dismissible show fade">
+                    <div class="alert-body">
+                        <button class="close" data-dismiss="alert">
+                            <span>&times;</span>
+                        </button>
+                        {{ session('status') }}
+                    </div>
+                </div>
+            @endif
+
+            <form wire:submit="sendPasswordResetLink">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input wire:model="email" id="email" type="email"
+                        class="form-control @error('email') is-invalid @enderror" name="email" tabindex="1" required
+                        autofocus>
+                    @error('email')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="2"
+                        wire:loading.attr="disabled">
+                        <span wire:loading.remove>Kirim Link Reset</span>
+                        <span wire:loading><i class="fas fa-spinner fa-spin"></i> Mengirim...</span>
+                    </button>
+                </div>
+            </form>
         </div>
-    </form>
+    </div>
+
+    <div class="mt-4 text-muted text-center">
+        Ingat password Anda? <a href="{{ route('login') }}" wire:navigate>Kembali ke Login</a>
+    </div>
+    <div class="simple-footer">
+        Copyright &copy; {{ config('app.name', 'Larashiz') }} {{ date('Y') }}
+    </div>
 </div>

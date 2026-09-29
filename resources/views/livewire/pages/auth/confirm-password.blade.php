@@ -33,30 +33,43 @@ new #[Layout('layouts.guest')] class extends Component
     }
 }; ?>
 
-<div>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('This is a secure area of the application. Please confirm your password before continuing.') }}
+<div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
+    <div class="login-brand">
+        <img src="{{ asset('assets/img/stisla-fill.svg') }}" alt="logo" width="100" class="shadow-light rounded-circle">
     </div>
 
-    <form wire:submit="confirmPassword">
-        <!-- Password -->
-        <div>
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input wire:model="password"
-                          id="password"
-                          class="block mt-1 w-full"
-                          type="password"
-                          name="password"
-                          required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+    <div class="card card-primary">
+        <div class="card-header">
+            <h4>Konfirmasi Password</h4>
         </div>
 
-        <div class="flex justify-end mt-4">
-            <x-primary-button>
-                {{ __('Confirm') }}
-            </x-primary-button>
+        <div class="card-body">
+            <p class="text-muted">Ini adalah area aman aplikasi. Harap konfirmasi password Anda sebelum melanjutkan.</p>
+
+            <form wire:submit="confirmPassword">
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input wire:model="password" id="password" type="password"
+                        class="form-control @error('password') is-invalid @enderror" name="password" required
+                        autocomplete="current-password" autofocus>
+                    @error('password')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block" wire:loading.attr="disabled">
+                        <span wire:loading.remove>Konfirmasi</span>
+                        <span wire:loading><i class="fas fa-spinner fa-spin"></i> Memvalidasi...</span>
+                    </button>
+                </div>
+            </form>
         </div>
-    </form>
+    </div>
+
+    <div class="simple-footer">
+        Copyright &copy; {{ config('app.name', 'Larashiz') }} {{ date('Y') }}
+    </div>
 </div>

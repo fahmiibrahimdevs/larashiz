@@ -35,24 +35,47 @@ new #[Layout('layouts.guest')] class extends Component
     }
 }; ?>
 
-<div>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
+<div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
+    <div class="login-brand">
+        <img src="{{ asset('assets/img/stisla-fill.svg') }}" alt="logo" width="100" class="shadow-light rounded-circle">
     </div>
 
-    @if (session('status') == 'verification-link-sent')
-        <div class="mb-4 font-medium text-sm text-green-600">
-            {{ __('A new verification link has been sent to the email address you provided during registration.') }}
+    <div class="card card-primary">
+        <div class="card-header">
+            <h4>Verifikasi Email</h4>
         </div>
-    @endif
 
-    <div class="mt-4 flex items-center justify-between">
-        <x-primary-button wire:click="sendVerification">
-            {{ __('Resend Verification Email') }}
-        </x-primary-button>
+        <div class="card-body">
+            <p class="text-muted">
+                Terima kasih telah mendaftar! Sebelum memulai, silakan verifikasi alamat email Anda dengan mengklik tautan yang baru saja kami kirimkan ke email Anda.
+            </p>
 
-        <button wire:click="logout" type="submit" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            {{ __('Log Out') }}
-        </button>
+            @if (session('status') == 'verification-link-sent')
+                <div class="alert alert-success alert-dismissible show fade">
+                    <div class="alert-body">
+                        <button class="close" data-dismiss="alert">
+                            <span>&times;</span>
+                        </button>
+                        Link verifikasi baru telah dikirim ke alamat email yang Anda daftarkan.
+                    </div>
+                </div>
+            @endif
+
+            <div class="mt-4">
+                <button wire:click="sendVerification" class="btn btn-primary btn-lg btn-block mb-3"
+                    wire:loading.attr="disabled">
+                    <span wire:loading.remove>Kirim Ulang Email Verifikasi</span>
+                    <span wire:loading><i class="fas fa-spinner fa-spin"></i> Mengirim...</span>
+                </button>
+
+                <button wire:click="logout" type="button" class="btn btn-outline-secondary btn-block">
+                    Logout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="simple-footer">
+        Copyright &copy; {{ config('app.name', 'Larashiz') }} {{ date('Y') }}
     </div>
 </div>
