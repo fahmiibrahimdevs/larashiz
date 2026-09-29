@@ -6,6 +6,7 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title ?? config('app.name', 'Larashiz') }} &mdash; SHIZUEFI</title>
+    <link rel="icon" type="image/jpeg" href="{{ asset('assets/img/larashiz-logo.jpg') }}">
 
     <!-- General CSS Files -->
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-tailwind.compiled.css') }}">

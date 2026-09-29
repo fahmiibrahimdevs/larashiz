@@ -1,10 +1,15 @@
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
-            <a href="{{ route('dashboard') }}">SHIZUEFI</a>
+            <a href="{{ route('dashboard') }}" class="d-flex align-items-center justify-content-center">
+                <img src="{{ asset('assets/img/larashiz-logo.jpg') }}" alt="Larashiz" width="32" height="32" class="rounded-circle mr-2 shadow-sm">
+                <span>LARASHIZ</span>
+            </a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
-            <a href="{{ route('dashboard') }}">SZ</a>
+            <a href="{{ route('dashboard') }}" class="d-flex align-items-center justify-content-center">
+                <img src="{{ asset('assets/img/larashiz-logo.jpg') }}" alt="Larashiz" width="28" height="28" class="rounded-circle shadow-sm">
+            </a>
         </div>
         <ul class="sidebar-menu">
             <li class="menu-header">Dashboard</li>
