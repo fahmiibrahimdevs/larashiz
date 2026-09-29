@@ -41,6 +41,7 @@ new class extends Component
         $user->save();
 
         $this->dispatch('profile-updated', name: $user->name);
+        session()->flash('profile_status', 'Informasi profil berhasil disimpan!');
     }
 
     /**
@@ -62,54 +63,61 @@ new class extends Component
     }
 }; ?>
 
-<section>
-    <header>
-        <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Profile Information') }}
-        </h2>
+<div>
+    @if (session('profile_status'))
+        <div class="alert alert-success alert-dismissible show fade">
+            <div class="alert-body">
+                <button class="close" data-dismiss="alert">
+                    <span>&times;</span>
+                </button>
+                <i class="fas fa-check-circle mr-2"></i> {{ session('profile_status') }}
+            </div>
+        </div>
+    @endif
 
-        <p class="mt-1 text-sm text-gray-600">
-            {{ __("Update your account's profile information and email address.") }}
-        </p>
-    </header>
-
-    <form wire:submit="updateProfileInformation" class="mt-6 space-y-6">
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input wire:model="name" id="name" name="name" type="text" class="mt-1 block w-full" required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
+    <form wire:submit="updateProfileInformation">
+        <div class="form-group">
+            <label for="profile_name">Nama Lengkap</label>
+            <input wire:model="name" id="profile_name" type="text"
+                class="form-control @error('name') is-invalid @enderror" required autocomplete="name">
+            @error('name')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+            @enderror
         </div>
 
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="email" id="email" name="email" type="email" class="mt-1 block w-full" required autocomplete="username" />
-            <x-input-error class="mt-2" :messages="$errors->get('email')" />
+        <div class="form-group">
+            <label for="profile_email">Alamat Email</label>
+            <input wire:model="email" id="profile_email" type="email"
+                class="form-control @error('email') is-invalid @enderror" required autocomplete="username">
+            @error('email')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+            @enderror
 
             @if (auth()->user() instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! auth()->user()->hasVerifiedEmail())
-                <div>
-                    <p class="text-sm mt-2 text-gray-800">
-                        {{ __('Your email address is unverified.') }}
-
-                        <button wire:click.prevent="sendVerification" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            {{ __('Click here to re-send the verification email.') }}
-                        </button>
-                    </p>
+                <div class="mt-2 text-warning text-small">
+                    <i class="fas fa-exclamation-circle mr-1"></i> Email Anda belum diverifikasi.
+                    <a href="#" wire:click.prevent="sendVerification" class="font-weight-bold ml-1">
+                        Klik di sini untuk mengirim ulang link verifikasi.
+                    </a>
 
                     @if (session('status') === 'verification-link-sent')
-                        <p class="mt-2 font-medium text-sm text-green-600">
-                            {{ __('A new verification link has been sent to your email address.') }}
-                        </p>
+                        <div class="text-success mt-1">
+                            <i class="fas fa-check mr-1"></i> Link verifikasi baru telah dikirim ke email Anda.
+                        </div>
                     @endif
                 </div>
             @endif
         </div>
 
-        <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
-
-            <x-action-message class="me-3" on="profile-updated">
-                {{ __('Saved.') }}
-            </x-action-message>
+        <div class="text-right">
+            <button type="submit" class="btn btn-primary" wire:loading.attr="disabled">
+                <span wire:loading.remove><i class="fas fa-save mr-1"></i> Simpan Perubahan</span>
+                <span wire:loading><i class="fas fa-spinner fa-spin mr-1"></i> Menyimpan...</span>
+            </button>
         </div>
     </form>
-</section>
+</div>

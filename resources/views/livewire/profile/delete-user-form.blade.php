@@ -7,6 +7,26 @@ use Livewire\Volt\Component;
 new class extends Component
 {
     public string $password = '';
+    public bool $confirmingUserDeletion = false;
+
+    /**
+     * Start the deletion confirmation flow.
+     */
+    public function confirmDeletion(): void
+    {
+        $this->resetErrorBag();
+        $this->password = '';
+        $this->confirmingUserDeletion = true;
+    }
+
+    /**
+     * Cancel the deletion confirmation flow.
+     */
+    public function cancelDeletion(): void
+    {
+        $this->confirmingUserDeletion = false;
+        $this->password = '';
+    }
 
     /**
      * Delete the currently authenticated user.
@@ -23,57 +43,40 @@ new class extends Component
     }
 }; ?>
 
-<section class="space-y-6">
-    <header>
-        <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Delete Account') }}
-        </h2>
-
-        <p class="mt-1 text-sm text-gray-600">
-            {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.') }}
-        </p>
-    </header>
-
-    <x-danger-button
-        x-data=""
-        x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
-    >{{ __('Delete Account') }}</x-danger-button>
-
-    <x-modal name="confirm-user-deletion" :show="$errors->isNotEmpty()" focusable>
-        <form wire:submit="deleteUser" class="p-6">
-
-            <h2 class="text-lg font-medium text-gray-900">
-                {{ __('Are you sure you want to delete your account?') }}
-            </h2>
-
-            <p class="mt-1 text-sm text-gray-600">
-                {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.') }}
+<div>
+    @if (! $confirmingUserDeletion)
+        <button wire:click="confirmDeletion" type="button" class="btn btn-danger btn-block">
+            <i class="fas fa-trash-alt mr-1"></i> Hapus Akun Saya
+        </button>
+    @else
+        <div class="alert alert-danger mb-3 p-3">
+            <h6 class="text-danger font-weight-bold"><i class="fas fa-exclamation-circle mr-1"></i> Konfirmasi Penghapusan</h6>
+            <p class="text-small mb-3">
+                Silakan masukkan kata sandi Anda untuk mengonfirmasi bahwa Anda benar-benar ingin menghapus akun ini secara permanen.
             </p>
 
-            <div class="mt-6">
-                <x-input-label for="password" value="{{ __('Password') }}" class="sr-only" />
+            <form wire:submit="deleteUser">
+                <div class="form-group mb-2">
+                    <input wire:model="password" type="password"
+                        class="form-control @error('password') is-invalid @enderror"
+                        placeholder="Masukkan Kata Sandi Anda" required autofocus>
+                    @error('password')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
 
-                <x-text-input
-                    wire:model="password"
-                    id="password"
-                    name="password"
-                    type="password"
-                    class="mt-1 block w-3/4"
-                    placeholder="{{ __('Password') }}"
-                />
-
-                <x-input-error :messages="$errors->get('password')" class="mt-2" />
-            </div>
-
-            <div class="mt-6 flex justify-end">
-                <x-secondary-button x-on:click="$dispatch('close')">
-                    {{ __('Cancel') }}
-                </x-secondary-button>
-
-                <x-danger-button class="ms-3">
-                    {{ __('Delete Account') }}
-                </x-danger-button>
-            </div>
-        </form>
-    </x-modal>
-</section>
+                <div class="d-flex justify-content-between mt-3">
+                    <button wire:click="cancelDeletion" type="button" class="btn btn-secondary btn-sm">
+                        Batal
+                    </button>
+                    <button type="submit" class="btn btn-danger btn-sm" wire:loading.attr="disabled">
+                        <span wire:loading.remove><i class="fas fa-trash mr-1"></i> Ya, Hapus Akun</span>
+                        <span wire:loading><i class="fas fa-spinner fa-spin mr-1"></i> Menghapus...</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    @endif
+</div>
