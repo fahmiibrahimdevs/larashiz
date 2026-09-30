@@ -68,9 +68,6 @@
                     <h4 class="text-danger"><i class="fas fa-trash-alt mr-2"></i> Hapus Akun</h4>
                 </div>
                 <div class="card-body">
-                    <p class="text-muted text-small">
-                        Setelah akun dihapus, semua data yang berkaitan akan dihapus secara permanen.
-                    </p>
                     <livewire:profile.delete-user-form />
                 </div>
             </div>

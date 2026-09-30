@@ -92,12 +92,7 @@ Semua halaman yang menampilkan tabel data (seperti pada modul **Posts** dan **Lo
 
             <div class="dt-search-wrapper">
                 <span class="mr-1">Search:</span>
-                <input
-                    type="text"
-                    wire:model.live.debounce.300ms="search"
-                    class="dt-search-input"
-                    placeholder="Search here..."
-                >
+                <input type="text" wire:model.live.debounce.300ms="search" class="dt-search-input" placeholder="Search here...">
             </div>
         </div>
 
@@ -106,13 +101,11 @@ Semua halaman yang menampilkan tabel data (seperti pada modul **Posts** dan **Lo
             <table class="table table-clean">
                 <thead class="bg-gray-100">
                     <tr>
-                        <th style="width: 60px;" class="text-center text-nowrap">NO</th>
+                        <th class="text-center text-nowrap" style="width: 60px;">NO</th>
                         <th class="text-nowrap">KOLOM UTAMA</th>
-                        <th style="width: 160px;" class="text-nowrap">KATEGORI</th>
-                        <th style="width: 140px;" class="text-nowrap">STATUS</th>
-                        <th class="text-center text-nowrap" style="width: 110px;">
-                            <i class="fas fa-cog text-muted text-[13px]" title="Aksi"></i>
-                        </th>
+                        <th class="text-nowrap" style="width: 160px;">KATEGORI</th>
+                        <th class="text-nowrap" style="width: 140px;">STATUS</th>
+                        <th class="text-center text-nowrap" style="width: 110px;"><i class="fas fa-cog text-muted" title="Aksi"></i></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -217,7 +210,134 @@ Semua halaman yang menampilkan tabel data (seperti pada modul **Posts** dan **Lo
 
 ## 7. Alur Kompilasi Aset Frontend
 
-Setiap perubahan CSS di `public/assets/css/components-tailwind.css` **wajib** dikompilasi ulang:
+Setiap perubahan CSS di `public/assets/css/components-tailwind.css` atau `style-tailwind.css` **wajib** dikompilasi ulang:
 ```bash
 npm run build:shizuefi
 ```
+
+---
+
+## 8. Standar Notifikasi & Konfirmasi SweetAlert2 (Mandatory SweetAlert2 Rules)
+
+1. **Wajib Menggunakan SweetAlert2 Modal Pop-up untuk Semua Notifikasi**:
+   - Seluruh pesan feedback/notifikasi (berhasil, gagal, peringatan, info) **WAJIB** menggunakan **SweetAlert2 Modal Pop-up** (`swal:alert` di tengah layar dengan judul, pesan, dan tombol OK):
+     ```php
+     // Notifikasi Sukses
+     $this->dispatch('swal:alert', [
+         'type' => 'success',
+         'title' => 'Berhasil!',
+         'message' => 'Status akun pengguna berhasil diaktifkan.',
+     ]);
+
+     // Notifikasi Error / Gagal
+     $this->dispatch('swal:alert', [
+         'type' => 'error',
+         'title' => 'Gagal!',
+         'message' => 'Terjadi kesalahan sistem saat memproses data.',
+     ]);
+     ```
+   - **Dilarang** menggunakan toastr/toast pojok atau alert banner statis di dalam blade. Seluruh interaksi notifikasi wajib tampil terpusat dan konsisten menggunakan modal pop-up SweetAlert2.
+
+2. **Wajib Menggunakan SweetAlert2 Konfirmasi untuk Aksi Berdampak Signifikan**:
+   - Tindakan destruktif (seperti menghapus data/pengguna) dan tindakan perubahan status (seperti aktifkan / nonaktifkan akun pengguna) **WAJIB** memicu dialog konfirmasi SweetAlert2 terlebih dahulu (`swal:confirm` atau `swal:confirm-delete`) sebelum aksi dieksekusi di backend.
+
+3. **Wajib Meminta Konfirmasi Pengguna Sebelum Menerapkan SweetAlert2 Konfirmasi Baru**:
+   - Jika saat merancang fitur baru ditemukan aksi yang berpotensi memerlukan dialog konfirmasi SweetAlert2, AI / developer **WAJIB meminta konfirmasi dan persetujuan pengguna (USER) terlebih dahulu** sebelum menambahkan flow konfirmasi tersebut.
+
+---
+
+## 9. Standar Kode Bersih Blade (Clean Blade & Presentation Logic Standard)
+
+1. **Dilarang Menuliskan Logic / Komputasi di File Blade**:
+   - **DILARANG KERAS** menuliskan blok `@php ... @endphp` untuk komputasi data, percabangan `match()`, `switch()`, manipulasi string kompleks, atau penentuan class CSS kondisional di dalam file view Blade.
+   - File Blade harus **langsung siap pakai (ready-to-render)** dan fokus hanya pada penyajian antarmuka HTML.
+2. **Gunakan Eloquent Accessor / Model Attribute**:
+   - Semua pemetaan representasi tampilan (seperti penentuan class badge, label status, format warna) **WAJIB** dipindahkan ke **Model Eloquent** sebagai Attribute Accessor (contoh: `$log->level_badge_class` pada Model `ActivityLog`).
+   - Panggil langsung atribut tersebut di Blade:
+     ```blade
+     <!-- Bersih & Langsung Siap Pakai -->
+     <span class="{{ $log->level_badge_class }}">
+         {{ strtoupper($log->level) }}
+     </span>
+     ```
+3. **Wajib Konsistensi Section Title & Lead**:
+   - Setiap halaman utama aplikasi **WAJIB** menyertakan `<h2 class="section-title">` dan `<p class="section-lead mb-3">` tepat di bawah `<x-slot name="header">` untuk menjaga konsistensi visual layout template.
+
+---
+
+## 10. Standar Loading State & Animasi Spinner Livewire (Wire Loading Standard)
+
+1. **Wajib `wire:loading.attr="disabled"` pada Seluruh Tombol Aksi**:
+   - Setiap tombol interaktif yang memicu aksi Livewire (tombol submit form, tombol edit modal, tombol hapus, tombol toggle status, tombol reset filter, tombol floating FAB) **WAJIB** memiliki atribut `wire:loading.attr="disabled"` dan `wire:target="..."` spesifik untuk mencegah klik berulang (*double-submit / spamming*).
+2. **Wajib Indikator Spinner Loading**:
+   - Setiap tombol aksi wajib menyertakan icon animasi spinner FontAwesome (`<i class="fas fa-spinner fa-spin"></i>`) yang tampil secara dinamis saat request Livewire sedang diproses:
+     ```blade
+     <!-- 1. Contoh pada Tombol Aksi Tabel / Icon Button -->
+     <button
+         type="button"
+         wire:click="edit({{ $item->id }})"
+         wire:loading.attr="disabled"
+         wire:target="edit({{ $item->id }})"
+         class="btn btn-primary btn-action"
+         title="Edit Data"
+     >
+         <i wire:loading wire:target="edit({{ $item->id }})" class="fas fa-spinner fa-spin"></i>
+         <i wire:loading.remove wire:target="edit({{ $item->id }})" class="fas fa-pencil-alt"></i>
+     </button>
+
+     <!-- 2. Contoh pada Tombol Submit Form Modal -->
+     <button type="submit" class="btn btn-primary" wire:loading.attr="disabled" wire:target="store">
+         <i wire:loading wire:target="store" class="fas fa-spinner fa-spin mr-1"></i>
+         <i wire:loading.remove wire:target="store" class="fas fa-save mr-1"></i>
+         Simpan Data
+     </button>
+
+     <!-- 3. Contoh pada Floating Action Button (FAB) -->
+     <button type="button" wire:click="create" wire:loading.attr="disabled" wire:target="create" class="btn-floating-add" title="Tambah Data" aria-label="Tambah Data">
+         <i wire:loading wire:target="create" class="fas fa-spinner fa-spin"></i>
+         <i wire:loading.remove wire:target="create" class="fas fa-plus"></i>
+     </button>
+     ```
+
+---
+
+## 11. Standar Format Tag HTML Satu Baris (Single-Line Tag & Element Standard)
+
+1. **Tag Input, Select, Textarea, dan Tombol Wajib Satu Baris**:
+   - **DILARANG** memecah/wrap atribut tag HTML (`<input>`, `<select>`, `<textarea>`, `<button>`) menjadi banyak baris ke bawah (*multi-line attribute wrapping*).
+   - Tuliskan seluruh atribut tag HTML secara ringkas dan bersih dalam **satu baris (one line)**:
+     ```blade
+     <!-- ✅ BENAR (Satu Baris Bersih) -->
+     <input type="text" id="title" wire:model="form.title" class="form-control @error('form.title') is-invalid @enderror" placeholder="Masukkan judul post..." autocomplete="off">
+     <button type="button" wire:click="edit({{ $item->id }})" wire:loading.attr="disabled" wire:target="edit({{ $item->id }})" class="btn btn-primary btn-action" data-toggle="tooltip" title="Edit Data">
+
+     <!-- ❌ SALAH (Dilarang dibungkus baris panjang ke bawah) -->
+     <input
+         type="text"
+         id="title"
+         wire:model="form.title"
+         class="form-control @error('form.title') is-invalid @enderror"
+         placeholder="Masukkan judul post..."
+         autocomplete="off"
+     >
+     ```
+
+2. **Tag Table Header (`<th>`) Wajib Ditulis Satu Baris Penuh**:
+   - Semua tag `<th>` pada `<thead>` wajib ditulis dalam **satu baris penuh (one line)** bersama isi labelnya:
+     ```blade
+     <!-- ✅ BENAR -->
+     <th class="text-center text-nowrap" style="width: 50px;">NO</th>
+     <th class="text-nowrap" style="width: 125px;">MODUL & AKSI</th>
+     <th class="text-nowrap">PESAN LOG</th>
+
+     <!-- ❌ SALAH -->
+     <th class="text-nowrap" style="width: 125px;">
+         MODUL & AKSI
+     </th>
+     ```
+
+3. **Pengecualian untuk Kolom Data Dinamis (`<td>`)**:
+   - Kolom data tabel (`<td>`) yang berisi sintaks Blade dinamis `{{ ... }}`, badge, wrapper div, atau manipulasi format tanggal diperbolehkan ditulis multi-line agar kode tetap terstruktur dan rapi.
+
+
+

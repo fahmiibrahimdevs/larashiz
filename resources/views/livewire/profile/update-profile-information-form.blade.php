@@ -78,8 +78,7 @@ new class extends Component
     <form wire:submit="updateProfileInformation">
         <div class="form-group">
             <label for="profile_name">Nama Lengkap</label>
-            <input wire:model="name" id="profile_name" type="text"
-                class="form-control @error('name') is-invalid @enderror" required autocomplete="name">
+            <input wire:model="name" id="profile_name" type="text" class="form-control @error('name') is-invalid @enderror" required autocomplete="name">
             @error('name')
                 <div class="invalid-feedback">
                     {{ $message }}
@@ -89,8 +88,7 @@ new class extends Component
 
         <div class="form-group">
             <label for="profile_email">Alamat Email</label>
-            <input wire:model="email" id="profile_email" type="email"
-                class="form-control @error('email') is-invalid @enderror" required autocomplete="username">
+            <input wire:model="email" id="profile_email" type="email" class="form-control @error('email') is-invalid @enderror" required autocomplete="username">
             @error('email')
                 <div class="invalid-feedback">
                     {{ $message }}

@@ -146,12 +146,33 @@
                 });
             });
 
-            // 3. Delete Confirmation Dialog
-            Livewire.on('swal:confirm-delete', (event) => {
+            // 3. Generic Confirmation Dialog (Livewire & SweetAlert2)
+            Livewire.on('swal:confirm', (event) => {
                 const data = getPayload(event);
                 Swal.fire({
-                    title: 'Apakah Anda Yakin?',
-                    text: data.title ? `Data "${data.title}" akan dihapus permanen!` : 'Data ini akan dihapus permanen!',
+                    title: data.title || 'Apakah Anda Yakin?',
+                    text: data.text || 'Tindakan ini akan diproses!',
+                    icon: data.icon || 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: data.confirmButtonColor || '#0b52aa',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: data.confirmButtonText || 'Ya, Lanjutkan!',
+                    cancelButtonText: data.cancelButtonText || 'Batal',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed && data.action) {
+                        Livewire.dispatch(data.action, data.params || { id: data.id });
+                    }
+                });
+            });
+
+            // 4. Delete Confirmation Dialog
+            Livewire.on('swal:confirm-delete', (event) => {
+                const data = getPayload(event);
+                const action = data.action || 'delete-post';
+                Swal.fire({
+                    title: data.title ? `Hapus "${data.title}"?` : 'Apakah Anda Yakin?',
+                    text: data.text || (data.title ? `Data "${data.title}" akan dihapus permanen!` : 'Data ini akan dihapus permanen!'),
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#fc544b',
@@ -161,7 +182,7 @@
                     reverseButtons: true
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        Livewire.dispatch('delete-post', { id: data.id });
+                        Livewire.dispatch(action, data.params || { id: data.id });
                     }
                 });
             });

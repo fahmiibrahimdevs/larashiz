@@ -1,5 +1,5 @@
 <div wire:ignore.self class="modal fade" id="logDetailModal" tabindex="-1" role="dialog" aria-labelledby="logDetailModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="logDetailModalLabel">
@@ -10,7 +10,7 @@
                 </button>
             </div>
 
-            <div class="modal-body">
+            <div class="modal-body pb-4">
                 @if($selectedLog)
                     <!-- Flutter / Mobile-Style Detail Header Banner -->
                     <div class="log-detail-banner">
@@ -24,16 +24,7 @@
                                 </span>
                             </div>
                             <div>
-                                @php
-                                    $level = strtolower($selectedLog->level);
-                                    $badgeClass = match($level) {
-                                        'error', 'critical' => 'badge badge-danger',
-                                        'warning', 'warn' => 'badge badge-warning',
-                                        'debug' => 'badge badge-secondary',
-                                        default => 'badge badge-info',
-                                    };
-                                @endphp
-                                <span class="{{ $badgeClass }}">
+                                <span class="{{ $selectedLog->level_badge_class }}">
                                     {{ strtoupper($selectedLog->level) }}
                                 </span>
                             </div>
@@ -139,12 +130,6 @@
                         <p class="mb-0">Memuat rincian data...</p>
                     </div>
                 @endif
-            </div>
-
-            <div class="modal-footer bg-whitesmoke br">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                    Tutup
-                </button>
             </div>
         </div>
     </div>

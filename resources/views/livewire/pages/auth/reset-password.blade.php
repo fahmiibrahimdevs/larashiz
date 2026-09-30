@@ -79,9 +79,7 @@ new #[Layout('layouts.guest')] class extends Component
             <form wire:submit="resetPassword">
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input wire:model="email" id="email" type="email"
-                        class="form-control @error('email') is-invalid @enderror" name="email" required autofocus
-                        autocomplete="username">
+                    <input wire:model="email" id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" required autofocus autocomplete="username">
                     @error('email')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -91,9 +89,7 @@ new #[Layout('layouts.guest')] class extends Component
 
                 <div class="form-group">
                     <label for="password">Password Baru</label>
-                    <input wire:model="password" id="password" type="password"
-                        class="form-control @error('password') is-invalid @enderror" name="password" required
-                        autocomplete="new-password">
+                    <input wire:model="password" id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
                     @error('password')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -103,9 +99,7 @@ new #[Layout('layouts.guest')] class extends Component
 
                 <div class="form-group">
                     <label for="password_confirmation">Konfirmasi Password Baru</label>
-                    <input wire:model="password_confirmation" id="password_confirmation" type="password"
-                        class="form-control @error('password_confirmation') is-invalid @enderror"
-                        name="password_confirmation" required autocomplete="new-password">
+                    <input wire:model="password_confirmation" id="password_confirmation" type="password" class="form-control @error('password_confirmation') is-invalid @enderror" name="password_confirmation" required autocomplete="new-password">
                     @error('password_confirmation')
                         <div class="invalid-feedback">
                             {{ $message }}

@@ -28,7 +28,7 @@
                     <div class="dropdown-divider"></div>
                     <form method="POST" action="{{ route('logout') }}" class="m-0 p-0">
                         @csrf
-                        <button type="submit" class="dropdown-item has-icon text-danger border-0 bg-transparent w-100 text-left" style="cursor: pointer; display: flex; align-items: center; outline: none;">
+                        <button type="submit" class="dropdown-item has-icon text-danger border-0 bg-transparent w-100 text-left" style="cursor: pointer; display: flex; align-items: center; outline: none; font-size: 13px; font-weight: 500; padding: 10px 20px;">
                             <i class="fas fa-sign-out-alt mr-2"></i> Keluar (Logout)
                         </button>
                     </form>

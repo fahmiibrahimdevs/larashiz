@@ -53,9 +53,7 @@ new #[Layout('layouts.guest')] class extends Component
             <form wire:submit="register">
                 <div class="form-group">
                     <label for="name">Nama Lengkap</label>
-                    <input wire:model="name" id="name" type="text"
-                        class="form-control @error('name') is-invalid @enderror" name="name" required autofocus
-                        autocomplete="name">
+                    <input wire:model="name" id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" required autofocus autocomplete="name">
                     @error('name')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -65,9 +63,7 @@ new #[Layout('layouts.guest')] class extends Component
 
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input wire:model="email" id="email" type="email"
-                        class="form-control @error('email') is-invalid @enderror" name="email" required
-                        autocomplete="username">
+                    <input wire:model="email" id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" required autocomplete="username">
                     @error('email')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -79,9 +75,7 @@ new #[Layout('layouts.guest')] class extends Component
                     <div class="col-12 col-md-6">
                         <div class="form-group">
                             <label for="password" class="d-block">Password</label>
-                            <input wire:model="password" id="password" type="password"
-                                class="form-control @error('password') is-invalid @enderror" name="password" required
-                                autocomplete="new-password">
+                            <input wire:model="password" id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
                             @error('password')
                                 <div class="invalid-feedback">
                                     {{ $message }}
@@ -93,9 +87,7 @@ new #[Layout('layouts.guest')] class extends Component
                     <div class="col-12 col-md-6">
                         <div class="form-group">
                             <label for="password_confirmation" class="d-block">Konfirmasi Password</label>
-                            <input wire:model="password_confirmation" id="password_confirmation" type="password"
-                                class="form-control @error('password_confirmation') is-invalid @enderror"
-                                name="password_confirmation" required autocomplete="new-password">
+                            <input wire:model="password_confirmation" id="password_confirmation" type="password" class="form-control @error('password_confirmation') is-invalid @enderror" name="password_confirmation" required autocomplete="new-password">
                             @error('password_confirmation')
                                 <div class="invalid-feedback">
                                     {{ $message }}

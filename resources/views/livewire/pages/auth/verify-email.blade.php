@@ -62,8 +62,7 @@ new #[Layout('layouts.guest')] class extends Component
             @endif
 
             <div class="mt-4">
-                <button wire:click="sendVerification" class="btn btn-primary btn-lg btn-block mb-3"
-                    wire:loading.attr="disabled">
+                <button wire:click="sendVerification" class="btn btn-primary btn-lg btn-block mb-3" wire:loading.attr="disabled">
                     <span wire:loading.remove>Kirim Ulang Email Verifikasi</span>
                     <span wire:loading><i class="fas fa-spinner fa-spin"></i> Mengirim...</span>
                 </button>

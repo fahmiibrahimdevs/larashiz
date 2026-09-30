@@ -54,8 +54,7 @@ new class extends Component
     <form wire:submit="updatePassword">
         <div class="form-group">
             <label for="current_password">Kata Sandi Saat Ini</label>
-            <input wire:model="current_password" id="current_password" type="password"
-                class="form-control @error('current_password') is-invalid @enderror" autocomplete="current-password">
+            <input wire:model="current_password" id="current_password" type="password" class="form-control @error('current_password') is-invalid @enderror" autocomplete="current-password">
             @error('current_password')
                 <div class="invalid-feedback">
                     {{ $message }}
@@ -67,8 +66,7 @@ new class extends Component
             <div class="col-12 col-md-6">
                 <div class="form-group">
                     <label for="new_password">Kata Sandi Baru</label>
-                    <input wire:model="password" id="new_password" type="password"
-                        class="form-control @error('password') is-invalid @enderror" autocomplete="new-password">
+                    <input wire:model="password" id="new_password" type="password" class="form-control @error('password') is-invalid @enderror" autocomplete="new-password">
                     @error('password')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -80,9 +78,7 @@ new class extends Component
             <div class="col-12 col-md-6">
                 <div class="form-group">
                     <label for="new_password_confirmation">Konfirmasi Kata Sandi Baru</label>
-                    <input wire:model="password_confirmation" id="new_password_confirmation" type="password"
-                        class="form-control @error('password_confirmation') is-invalid @enderror"
-                        autocomplete="new-password">
+                    <input wire:model="password_confirmation" id="new_password_confirmation" type="password" class="form-control @error('password_confirmation') is-invalid @enderror" autocomplete="new-password">
                     @error('password_confirmation')
                         <div class="invalid-feedback">
                             {{ $message }}

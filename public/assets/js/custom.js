@@ -21,6 +21,7 @@
   function resetDialog(dialog) {
     if (!dialog) return;
     dialog.style.transition = "";
+    dialog.style.transform = "";
     dialog.style.translate = "";
   }
 
@@ -52,7 +53,7 @@
     var dy = e.clientY - drag.startY;
     if (dy < 0) dy = dy * 0.2; // rubber-band when dragged upwards
     drag.dy = dy;
-    drag.dialog.style.translate = "0px " + dy + "px";
+    drag.dialog.style.transform = "translate3d(0, " + dy + "px, 0)";
     if (e.cancelable) e.preventDefault();
   }
 
@@ -89,8 +90,8 @@
       }
     }
 
-    dialog.style.transition = "translate 300ms ease-out";
-    dialog.style.translate = "0px " + height + "px";
+    dialog.style.transition = "transform 300ms ease-out";
+    dialog.style.transform = "translate3d(0, " + height + "px, 0)";
     dialog.addEventListener("transitionend", finish, { once: true });
     setTimeout(finish, 340);
   }

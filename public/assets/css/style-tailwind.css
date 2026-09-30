@@ -621,54 +621,179 @@ table tr:hover .table-links {
 
 /* 3.8b Bottom sheet modal (mobile < 768px) — Flutter showModalBottomSheet style */
 @media (max-width: 767.98px) {
+    .modal {
+        display: none;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        z-index: 1050 !important;
+        overflow-y: hidden !important;
+        overflow-x: hidden !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .modal.show {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-end !important;
+        align-items: stretch !important;
+        overflow: hidden !important;
+    }
+
     .modal .modal-dialog,
-    .modal .modal-dialog-centered {
-        @apply absolute inset-x-0 bottom-0 m-0 w-full max-w-full;
-        min-height: 0;
+    .modal .modal-dialog-centered,
+    .modal .modal-dialog-scrollable {
+        position: relative !important;
+        inset: auto !important;
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 0 !important;
+        height: auto !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-end !important;
+        pointer-events: auto !important;
+        transform: none;
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
     }
 
     .modal .modal-dialog-centered::before {
-        display: none;
+        display: none !important;
     }
 
     .modal.fade .modal-dialog {
-        @apply translate-y-full;
+        transform: translateY(100%) !important;
+        transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1) !important;
     }
 
     .modal.show .modal-dialog {
-        @apply translate-y-0;
+        transform: translateY(0) !important;
     }
 
     .modal .modal-content {
-        @apply relative max-h-[90vh] max-w-full rounded-t-[16px] rounded-b-none border-0;
-        padding-bottom: env(safe-area-inset-bottom, 0px);
+        position: relative !important;
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        max-height: calc(100vh - 60px) !important;
+        max-height: calc(100dvh - 3.75rem) !important;
+        border-top-left-radius: 20px !important;
+        border-top-right-radius: 20px !important;
+        border-bottom-left-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+        border: none !important;
+        box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.15) !important;
+        background-color: #ffffff !important;
+        overflow-x: hidden !important;
+        overflow-y: hidden !important;
+        padding-bottom: env(safe-area-inset-bottom, 16px) !important;
+        box-sizing: border-box !important;
+    }
+
+    .modal .modal-content > form {
+        display: flex !important;
+        flex-direction: column !important;
+        flex: 1 1 auto !important;
+        min-height: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+        overflow-y: hidden !important;
+        box-sizing: border-box !important;
     }
 
     .modal .modal-header {
-        @apply relative cursor-grab pt-[20px];
-        touch-action: none;
-        user-select: none;
-        -webkit-user-select: none;
+        position: relative !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        flex-shrink: 0 !important;
+        padding: 24px 20px 14px 20px !important;
+        border-bottom: 1px solid #f1f5f9 !important;
+        background-color: #ffffff !important;
+        touch-action: none !important;
+        user-select: none !important;
+        -webkit-user-select: none !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
 
     html.modal-sheet-dragging,
     html.modal-sheet-dragging body {
-        user-select: none;
-        -webkit-user-select: none;
+        user-select: none !important;
+        -webkit-user-select: none !important;
     }
 
     .modal .modal-header::before {
-        content: "";
-        @apply absolute left-1/2 top-[8px] h-[4px] w-[40px] -translate-x-1/2 rounded-full bg-[#9ca3af];
+        content: "" !important;
+        position: absolute !important;
+        top: 8px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        height: 4px !important;
+        width: 36px !important;
+        border-radius: 9999px !important;
+        background-color: #cbd5e1 !important;
     }
 
     .modal .modal-body,
     .modal .modal-dialog-scrollable .modal-body {
-        @apply overflow-y-auto;
+        flex: 1 1 auto !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        overscroll-behavior: contain !important;
+        padding: 16px 20px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .modal .modal-body .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100% !important;
+    }
+
+    .modal .modal-body .row > [class*="col-"] {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        width: 100% !important;
+    }
+
+    .modal .select2-container,
+    .modal .select2-container--default {
+        width: 100% !important;
+        max-width: 100% !important;
     }
 
     .modal .modal-footer {
-        @apply rounded-b-none;
+        flex-shrink: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        gap: 8px !important;
+        border-top: 1px solid #f1f5f9 !important;
+        border-bottom-left-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+        background-color: #ffffff !important;
+        padding: 12px 16px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
+    }
+
+    .modal .modal-footer .btn {
+        margin: 0 !important;
     }
 }
 
@@ -1470,21 +1595,27 @@ h6 .badge {
 .dropdown-menu.show {
     @apply !block;
 }
-.dropdown-menu a {
+.dropdown-menu a,
+.dropdown-menu button.dropdown-item {
     @apply text-[13px];
 }
 .dropdown-menu .dropdown-title {
     @apply uppercase text-[10px] tracking-[1.5px] font-bold !text-[#191d21] px-[20px] py-[10px] leading-[20px] text-[#98a6ad];
 }
-.dropdown-menu.dropdown-menu-sm a {
+.dropdown-menu.dropdown-menu-sm a,
+.dropdown-menu.dropdown-menu-sm button.dropdown-item {
     @apply text-[14px] tracking-normal px-[20px] py-[10px] text-[#6c757d];
 }
-a.dropdown-item {
+a.dropdown-item,
+button.dropdown-item {
     @apply px-[20px] py-[10px] font-medium leading-[1.2];
 }
 a.dropdown-item:focus,
 a.dropdown-item:active,
-a.dropdown-item.active {
+a.dropdown-item.active,
+button.dropdown-item:focus,
+button.dropdown-item:active,
+button.dropdown-item.active {
     @apply bg-[#0b52aa] !text-white;
 }
 .dropdown-divider {

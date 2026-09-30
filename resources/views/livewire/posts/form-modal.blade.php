@@ -10,21 +10,14 @@
                 </button>
             </div>
 
-            <form wire:submit.prevent="{{ $isEditMode ? 'update' : 'store' }}">
+            <form wire:submit="{{ $isEditMode ? 'update' : 'store' }}">
                 <div class="modal-body">
                     <div class="row">
                         <!-- Judul Post -->
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="title">Judul Post <span class="text-danger">*</span></label>
-                                <input
-                                    type="text"
-                                    id="title"
-                                    wire:model="form.title"
-                                    class="form-control @error('form.title') is-invalid @enderror"
-                                    placeholder="Masukkan judul post..."
-                                    autocomplete="off"
-                                >
+                                <input type="text" id="title" wire:model="form.title" class="form-control @error('form.title') is-invalid @enderror" placeholder="Masukkan judul post..." autocomplete="off">
                                 @error('form.title')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -35,10 +28,7 @@
                         <div class="col-md-6">
                             <div class="form-group" wire:ignore>
                                 <label for="category">Kategori <span class="text-danger">*</span></label>
-                                <select
-                                    id="category"
-                                    class="form-control select2"
-                                >
+                                <select id="category" class="form-control select2">
                                     <option value="">-- Pilih Kategori --</option>
                                     <option value="Technology">Technology</option>
                                     <option value="Lifestyle">Lifestyle</option>
@@ -56,10 +46,7 @@
                         <div class="col-md-6">
                             <div class="form-group" wire:ignore>
                                 <label for="status">Status Publikasi <span class="text-danger">*</span></label>
-                                <select
-                                    id="status"
-                                    class="form-control select2"
-                                >
+                                <select id="status" class="form-control select2">
                                     <option value="draft">Draft (Konsep)</option>
                                     <option value="published">Published (Diterbitkan)</option>
                                 </select>
@@ -73,14 +60,7 @@
                         <div class="col-md-12">
                             <div class="form-group mb-0">
                                 <label for="content">Konten <span class="text-danger">*</span></label>
-                                <textarea
-                                    id="content"
-                                    wire:model="form.content"
-                                    rows="5"
-                                    class="form-control @error('form.content') is-invalid @enderror"
-                                    placeholder="Tuliskan isi konten post di sini..."
-                                    style="height: 140px;"
-                                ></textarea>
+                                <textarea id="content" wire:model="form.content" rows="5" class="form-control @error('form.content') is-invalid @enderror" placeholder="Tuliskan isi konten post di sini..." style="height: 140px;"></textarea>
                                 @error('form.content')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -93,10 +73,13 @@
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">
                         <i class="fas fa-times mr-1"></i> Batal
                     </button>
-                    <button type="submit" class="btn btn-primary" wire:loading.attr="disabled">
-                        <span wire:loading wire:target="{{ $isEditMode ? 'update' : 'store' }}" class="spinner-border spinner-border-sm mr-1" role="status" aria-hidden="true"></span>
-                        <i wire:loading.remove wire:target="{{ $isEditMode ? 'update' : 'store' }}" class="fas fa-save mr-1"></i>
-                        {{ $isEditMode ? 'Simpan Perubahan' : 'Tambah Data' }}
+                    <button type="submit" class="btn btn-primary" wire:loading.attr="disabled" wire:target="update, store">
+                        <span wire:loading wire:target="update, store">
+                            <i class="fas fa-spinner fa-spin mr-1"></i> Menyimpan...
+                        </span>
+                        <span wire:loading.remove wire:target="update, store">
+                            <i class="fas fa-save mr-1"></i> {{ $isEditMode ? 'Simpan Perubahan' : 'Tambah Data' }}
+                        </span>
                     </button>
                 </div>
             </form>

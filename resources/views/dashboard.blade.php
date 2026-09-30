@@ -7,6 +7,12 @@
         </div>
     </x-slot>
 
+    <!-- Section Title & Lead -->
+    <h2 class="section-title">Ringkasan Sistem</h2>
+    <p class="section-lead mb-3">
+        Selamat datang di panel kontrol utama sistem Larashiz.
+    </p>
+
     <!-- Stat Cards -->
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-12">

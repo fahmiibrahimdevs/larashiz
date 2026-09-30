@@ -60,9 +60,7 @@ new #[Layout('layouts.guest')] class extends Component
             <form wire:submit="sendPasswordResetLink">
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input wire:model="email" id="email" type="email"
-                        class="form-control @error('email') is-invalid @enderror" name="email" tabindex="1" required
-                        autofocus>
+                    <input wire:model="email" id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" tabindex="1" required autofocus>
                     @error('email')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -71,8 +69,7 @@ new #[Layout('layouts.guest')] class extends Component
                 </div>
 
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="2"
-                        wire:loading.attr="disabled">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="2" wire:loading.attr="disabled">
                         <span wire:loading.remove>Kirim Link Reset</span>
                         <span wire:loading><i class="fas fa-spinner fa-spin"></i> Mengirim...</span>
                     </button>

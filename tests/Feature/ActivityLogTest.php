@@ -180,4 +180,19 @@ class ActivityLogTest extends TestCase
         $this->assertEquals('RuntimeException', $context['error']['type']);
         $this->assertEquals('Database connection lost', $context['error']['message']);
     }
+
+    public function test_activity_log_level_badge_class_accessor(): void
+    {
+        $errorLog = new ActivityLog(['level' => 'error']);
+        $this->assertEquals('badge badge-danger', $errorLog->level_badge_class);
+
+        $warnLog = new ActivityLog(['level' => 'warning']);
+        $this->assertEquals('badge badge-warning', $warnLog->level_badge_class);
+
+        $debugLog = new ActivityLog(['level' => 'debug']);
+        $this->assertEquals('badge badge-secondary', $debugLog->level_badge_class);
+
+        $infoLog = new ActivityLog(['level' => 'info']);
+        $this->assertEquals('badge badge-info', $infoLog->level_badge_class);
+    }
 }

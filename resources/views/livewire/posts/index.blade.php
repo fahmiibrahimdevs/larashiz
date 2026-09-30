@@ -35,12 +35,7 @@
 
                 <div class="dt-search-wrapper">
                     <span class="mr-1">Search:</span>
-                    <input
-                        type="text"
-                        wire:model.live.debounce.300ms="search"
-                        class="dt-search-input"
-                        placeholder="Search here..."
-                    >
+                    <input type="text" wire:model.live.debounce.300ms="search" class="dt-search-input" placeholder="Search here...">
                 </div>
             </div>
 
@@ -48,14 +43,12 @@
             <div class="table-responsive">
                 <table class="table table-clean">
                     <thead class="bg-gray-100">
-                        <tr class="bg-gray-100">
-                            <th style="width: 70px;" class="text-center">NO</th>
-                            <th>JUDUL & KONTEN POST</th>
-                            <th style="width: 160px;">KATEGORI</th>
-                            <th style="width: 140px;">STATUS</th>
-                            <th class="text-center" style="width: 110px;">
-                                <i class="fas fa-cog text-muted text-[13px]" title="Aksi"></i>
-                            </th>
+                        <tr>
+                            <th class="text-center text-nowrap" style="width: 60px;">NO</th>
+                            <th class="text-nowrap">JUDUL & KONTEN POST</th>
+                            <th class="text-nowrap" style="width: 160px;">KATEGORI</th>
+                            <th class="text-nowrap" style="width: 140px;">STATUS</th>
+                            <th class="text-center text-nowrap" style="width: 110px;"><i class="fas fa-cog text-muted" title="Aksi"></i></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -89,23 +82,13 @@
                                     @endif
                                 </td>
                                 <td class="text-center align-middle text-nowrap">
-                                    <button
-                                        type="button"
-                                        wire:click="edit({{ $post->id }})"
-                                        class="btn btn-primary btn-action mr-1"
-                                        data-toggle="tooltip"
-                                        title="Edit Data"
-                                    >
-                                        <i class="fas fa-pencil-alt"></i>
+                                    <button type="button" wire:click="edit({{ $post->id }})" wire:loading.attr="disabled" wire:target="edit({{ $post->id }})" class="btn btn-primary btn-action mr-1" data-toggle="tooltip" title="Edit Data">
+                                        <i wire:loading wire:target="edit({{ $post->id }})" class="fas fa-spinner fa-spin"></i>
+                                        <i wire:loading.remove wire:target="edit({{ $post->id }})" class="fas fa-pencil-alt"></i>
                                     </button>
-                                    <button
-                                        type="button"
-                                        wire:click="confirmDelete({{ $post->id }})"
-                                        class="btn btn-danger btn-action"
-                                        data-toggle="tooltip"
-                                        title="Hapus Data"
-                                    >
-                                        <i class="fas fa-trash"></i>
+                                    <button type="button" wire:click="confirmDelete({{ $post->id }})" wire:loading.attr="disabled" wire:target="confirmDelete({{ $post->id }})" class="btn btn-danger btn-action" data-toggle="tooltip" title="Hapus Data">
+                                        <i wire:loading wire:target="confirmDelete({{ $post->id }})" class="fas fa-spinner fa-spin"></i>
+                                        <i wire:loading.remove wire:target="confirmDelete({{ $post->id }})" class="fas fa-trash"></i>
                                     </button>
                                 </td>
                             </tr>
@@ -143,14 +126,9 @@
     </div>
 
     <!-- Floating Action Button (Tambah Data) -->
-    <button
-        type="button"
-        wire:click="create"
-        class="btn-floating-add"
-        title="Tambah Data"
-        aria-label="Tambah Data"
-    >
-        <i class="fas fa-plus"></i>
+    <button type="button" wire:click="create" wire:loading.attr="disabled" wire:target="create" class="btn-floating-add" title="Tambah Data" aria-label="Tambah Data">
+        <i wire:loading wire:target="create" class="fas fa-spinner fa-spin"></i>
+        <i wire:loading.remove wire:target="create" class="fas fa-plus"></i>
     </button>
 
     <!-- Modal Form (Add / Edit) -->

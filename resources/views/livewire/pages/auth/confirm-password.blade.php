@@ -49,9 +49,7 @@ new #[Layout('layouts.guest')] class extends Component
             <form wire:submit="confirmPassword">
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input wire:model="password" id="password" type="password"
-                        class="form-control @error('password') is-invalid @enderror" name="password" required
-                        autocomplete="current-password" autofocus>
+                    <input wire:model="password" id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" autofocus>
                     @error('password')
                         <div class="invalid-feedback">
                             {{ $message }}

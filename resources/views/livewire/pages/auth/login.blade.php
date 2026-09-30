@@ -49,9 +49,7 @@ new #[Layout('layouts.guest')] class extends Component
             <form wire:submit="login">
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input wire:model="form.email" id="email" type="email"
-                        class="form-control @error('form.email') is-invalid @enderror" name="email" tabindex="1"
-                        required autofocus autocomplete="username">
+                    <input wire:model="form.email" id="email" type="email" class="form-control @error('form.email') is-invalid @enderror" name="email" tabindex="1" required autofocus autocomplete="username">
                     @error('form.email')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -70,9 +68,7 @@ new #[Layout('layouts.guest')] class extends Component
                             </div>
                         @endif
                     </div>
-                    <input wire:model="form.password" id="password" type="password"
-                        class="form-control @error('form.password') is-invalid @enderror" name="password" tabindex="2"
-                        required autocomplete="current-password">
+                    <input wire:model="form.password" id="password" type="password" class="form-control @error('form.password') is-invalid @enderror" name="password" tabindex="2" required autocomplete="current-password">
                     @error('form.password')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -82,15 +78,13 @@ new #[Layout('layouts.guest')] class extends Component
 
                 <div class="form-group">
                     <div class="custom-control custom-checkbox">
-                        <input wire:model="form.remember" type="checkbox" name="remember" class="custom-control-input"
-                            tabindex="3" id="remember-me">
+                        <input wire:model="form.remember" type="checkbox" name="remember" class="custom-control-input" tabindex="3" id="remember-me">
                         <label class="custom-control-label" for="remember-me">Ingat Saya</label>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4"
-                        wire:loading.attr="disabled">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4" wire:loading.attr="disabled">
                         <span wire:loading.remove>Login</span>
                         <span wire:loading><i class="fas fa-spinner fa-spin"></i> Memproses...</span>
                     </button>

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -91,5 +92,26 @@ class ActivityLog extends Model
     public function scopeLevel(Builder $query, ?string $level = null): Builder
     {
         return $query->when(! empty($level), fn (Builder $q) => $q->where('level', strtolower($level)));
+    }
+
+    /**
+     * Get the badge CSS class for the log level.
+     *
+     * @return Attribute<string, never>
+     */
+    protected function levelBadgeClass(): Attribute
+    {
+        return Attribute::make(
+            get: function (): string {
+                $level = strtolower($this->level ?? '');
+
+                return match ($level) {
+                    'error', 'critical' => 'badge badge-danger',
+                    'warning', 'warn' => 'badge badge-warning',
+                    'debug' => 'badge badge-secondary',
+                    default => 'badge badge-info',
+                };
+            }
+        );
     }
 }

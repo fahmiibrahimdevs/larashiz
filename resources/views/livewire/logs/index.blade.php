@@ -7,6 +7,12 @@
         </div>
     </x-slot>
 
+    <!-- Section Title & Lead -->
+    <h2 class="section-title">Log Aktivitas</h2>
+    <p class="section-lead mb-3">
+        Monitoring dan lacak seluruh rekaman aktivitas sistem dan interaksi pengguna secara real-time.
+    </p>
+
     <!-- Top Summary Statistic Cards (Bawaan Template Stisla) -->
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-12">
@@ -80,11 +86,7 @@
                     <h4>Filter Log</h4>
                     @if ($search || $activePreset !== 'today' || $filterLevel || $filterModule)
                         <div class="card-header-action">
-                            <button
-                                type="button"
-                                wire:click="resetFilters"
-                                class="btn btn-sm btn-link text-danger font-weight-bold text-decoration-none p-0"
-                            >
+                            <button type="button" wire:click="resetFilters" class="btn btn-sm btn-link text-danger font-weight-bold text-decoration-none p-0">
                                 <i class="fas fa-undo-alt mr-1"></i> Reset Filter
                             </button>
                         </div>
@@ -120,12 +122,7 @@
 
                         <div class="dt-search-wrapper">
                             <span>Search:</span>
-                            <input
-                                type="text"
-                                wire:model.live.debounce.300ms="search"
-                                class="dt-search-input"
-                                placeholder="Cari pesan, user, IP, aksi..."
-                            >
+                            <input type="text" wire:model.live.debounce.300ms="search" class="dt-search-input" placeholder="Cari pesan, user, IP, aksi...">
                         </div>
                     </div>
 
@@ -134,27 +131,13 @@
                         <table class="table table-clean">
                             <thead class="bg-gray-100">
                                 <tr>
-                                    <th class="text-center text-nowrap" style="width: 40px;">
-                                        NO
-                                    </th>
-                                    <th class="text-nowrap" style="width: 105px;">
-                                        WAKTU
-                                    </th>
-                                    <th class="text-center text-nowrap" style="width: 80px;">
-                                        LEVEL
-                                    </th>
-                                    <th class="text-nowrap" style="width: 125px;">
-                                        MODUL & AKSI
-                                    </th>
-                                    <th class="text-nowrap">
-                                        PESAN LOG
-                                    </th>
-                                    <th class="text-nowrap" style="width: 115px;">
-                                        USER / IP
-                                    </th>
-                                    <th class="text-center text-nowrap" style="width: 50px;">
-                                        DETAIL
-                                    </th>
+                                    <th class="text-center text-nowrap" style="width: 40px;">NO</th>
+                                    <th class="text-nowrap" style="width: 105px;">WAKTU</th>
+                                    <th class="text-center text-nowrap" style="width: 80px;">LEVEL</th>
+                                    <th class="text-nowrap" style="width: 125px;">MODUL & AKSI</th>
+                                    <th class="text-nowrap">PESAN LOG</th>
+                                    <th class="text-nowrap" style="width: 115px;">USER / IP</th>
+                                    <th class="text-center text-nowrap" style="width: 50px;">DETAIL</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -172,16 +155,7 @@
                                             </div>
                                         </td>
                                         <td class="align-middle text-center text-nowrap">
-                                            @php
-                                                $level = strtolower($log->level);
-                                                $badgeClass = match($level) {
-                                                    'error', 'critical' => 'badge badge-danger',
-                                                    'warning', 'warn' => 'badge badge-warning',
-                                                    'debug' => 'badge badge-secondary',
-                                                    default => 'badge badge-info',
-                                                };
-                                            @endphp
-                                            <span class="{{ $badgeClass }}">
+                                            <span class="{{ $log->level_badge_class }}">
                                                 {{ strtoupper($log->level) }}
                                             </span>
                                         </td>
@@ -213,14 +187,9 @@
                                             </div>
                                         </td>
                                         <td class="align-middle text-center text-nowrap">
-                                            <button
-                                                type="button"
-                                                wire:click="showDetail({{ $log->id }})"
-                                                class="btn btn-primary btn-action"
-                                                data-toggle="tooltip"
-                                                title="Lihat Detail Context"
-                                            >
-                                                <i class="fas fa-eye"></i>
+                                            <button type="button" wire:click="showDetail({{ $log->id }})" wire:loading.attr="disabled" wire:target="showDetail({{ $log->id }})" class="btn btn-primary btn-action" data-toggle="tooltip" title="Lihat Detail Context">
+                                                <i wire:loading wire:target="showDetail({{ $log->id }})" class="fas fa-spinner fa-spin"></i>
+                                                <i wire:loading.remove wire:target="showDetail({{ $log->id }})" class="fas fa-eye"></i>
                                             </button>
                                         </td>
                                     </tr>
@@ -238,12 +207,9 @@
                                                     @endif
                                                 </small>
                                                 @if ($search || $activePreset !== 'today' || $filterLevel || $filterModule)
-                                                    <button
-                                                        type="button"
-                                                        wire:click="resetFilters"
-                                                        class="btn btn-primary btn-sm mt-3 px-3"
-                                                    >
-                                                        <i class="fas fa-undo-alt mr-1"></i> Reset ke Hari Ini
+                                                    <button type="button" wire:click="resetFilters" wire:loading.attr="disabled" wire:target="resetFilters" class="btn btn-primary btn-sm mt-3 px-3">
+                                                        <i wire:loading wire:target="resetFilters" class="fas fa-spinner fa-spin mr-1"></i>
+                                                        <i wire:loading.remove wire:target="resetFilters" class="fas fa-undo-alt mr-1"></i> Reset ke Hari Ini
                                                     </button>
                                                 @endif
                                             </div>
@@ -269,14 +235,7 @@
     </div>
 
     <!-- Floating Action Button (Filter Modal for Mobile) -->
-    <button
-        type="button"
-        class="btn-floating-filter d-md-none"
-        data-toggle="modal"
-        data-target="#filterMobileModal"
-        title="Buka Filter Log"
-        aria-label="Filter Log"
-    >
+    <button type="button" class="btn-floating-filter d-md-none" data-toggle="modal" data-target="#filterMobileModal" title="Buka Filter Log" aria-label="Filter Log">
         <i class="fas fa-filter"></i>
         @if ($search || $activePreset !== 'today' || $filterLevel || $filterModule)
             <span class="filter-badge-indicator"></span>
