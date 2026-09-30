@@ -12,12 +12,50 @@
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-tailwind.compiled.css') }}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
         integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
 
     <!-- Template CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/style-tailwind.compiled.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/components-tailwind.compiled.css') }}">
 
     @livewireStyles
+    <style>
+        /* Global Balanced Card Shadows (Clean, Crisp & Modern Depth) */
+        .card,
+        .card.card-statistic-1,
+        .card.card-statistic-2 {
+            box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.06), 0 1px 2px 0 rgba(0, 0, 0, 0.04) !important;
+            border: 1px solid #e9edf2 !important;
+            margin-bottom: 24px;
+        }
+
+        .card.card-statistic-1 .card-icon,
+        .card.card-statistic-2 .card-icon {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.08) !important;
+        }
+
+        .shadow-sm {
+            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.06) !important;
+        }
+
+        .shadow,
+        .shadow-md {
+            box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.08), 0 2px 4px 0 rgba(0, 0, 0, 0.04) !important;
+        }
+
+        /* Mobile Responsive Spacing (Clean & Compact) */
+        @media (max-width: 767.98px) {
+            .card,
+            .card.card-statistic-1,
+            .card.card-statistic-2 {
+                margin-bottom: 14px !important;
+            }
+
+            .row > [class*="col-"] {
+                margin-bottom: 0 !important;
+            }
+        }
+    </style>
     @stack('styles')
     {{ $styles ?? '' }}
 </head>
@@ -31,7 +69,7 @@
 
             <!-- Main Content -->
             <div class="main-content">
-                <section class="section">
+                <section class="section custom-section">
                     @if (isset($header))
                         <div class="section-header">
                             {{ $header }}
@@ -58,6 +96,7 @@
     <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.full.min.js"></script>
     <script src="{{ asset('assets/js/stisla.js') }}"></script>
 
     <!-- Template JS Scripts -->
@@ -65,6 +104,83 @@
     <script src="{{ asset('assets/js/custom.js') }}"></script>
 
     @livewireScripts
+
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Global Livewire & SweetAlert2 Bridge -->
+    <script>
+        document.addEventListener('livewire:init', () => {
+            const getPayload = (event) => Array.isArray(event) ? event[0] : event;
+
+            // 1. Toast Notification (Success, Info, Warning, Error)
+            Livewire.on('swal:toast', (event) => {
+                const data = getPayload(event);
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3500,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer);
+                        toast.addEventListener('mouseleave', Swal.resumeTimer);
+                    }
+                });
+
+                Toast.fire({
+                    icon: data.type || 'info',
+                    title: data.message || ''
+                });
+            });
+
+            // 2. Alert Modal Dialog (Success, Info, Warning, Error)
+            Livewire.on('swal:alert', (event) => {
+                const data = getPayload(event);
+                Swal.fire({
+                    icon: data.type || 'info',
+                    title: data.title || 'Pemberitahuan',
+                    text: data.message || '',
+                    confirmButtonText: 'Tutup',
+                    confirmButtonColor: '#0b52aa'
+                });
+            });
+
+            // 3. Delete Confirmation Dialog
+            Livewire.on('swal:confirm-delete', (event) => {
+                const data = getPayload(event);
+                Swal.fire({
+                    title: 'Apakah Anda Yakin?',
+                    text: data.title ? `Data "${data.title}" akan dihapus permanen!` : 'Data ini akan dihapus permanen!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#fc544b',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Ya, Hapus!',
+                    cancelButtonText: 'Batal',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Livewire.dispatch('delete-post', { id: data.id });
+                    }
+                });
+            });
+
+            // 4. Bootstrap Modal Handler
+            Livewire.on('open-modal', (event) => {
+                const data = getPayload(event);
+                const modalId = data.id || 'postModal';
+                $('#' + modalId).modal('show');
+            });
+
+            Livewire.on('close-modal', (event) => {
+                const data = getPayload(event);
+                const modalId = data.id || 'postModal';
+                $('#' + modalId).modal('hide');
+            });
+        });
+    </script>
+
     @stack('scripts')
     {{ $scripts ?? '' }}
 </body>

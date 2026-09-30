@@ -64,31 +64,35 @@ new class extends Component
         </div>
 
         <div class="row">
-            <div class="form-group col-12 col-md-6">
-                <label for="new_password">Kata Sandi Baru</label>
-                <input wire:model="password" id="new_password" type="password"
-                    class="form-control @error('password') is-invalid @enderror" autocomplete="new-password">
-                @error('password')
-                    <div class="invalid-feedback">
-                        {{ $message }}
-                    </div>
-                @enderror
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    <label for="new_password">Kata Sandi Baru</label>
+                    <input wire:model="password" id="new_password" type="password"
+                        class="form-control @error('password') is-invalid @enderror" autocomplete="new-password">
+                    @error('password')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
             </div>
 
-            <div class="form-group col-12 col-md-6">
-                <label for="new_password_confirmation">Konfirmasi Kata Sandi Baru</label>
-                <input wire:model="password_confirmation" id="new_password_confirmation" type="password"
-                    class="form-control @error('password_confirmation') is-invalid @enderror"
-                    autocomplete="new-password">
-                @error('password_confirmation')
-                    <div class="invalid-feedback">
-                        {{ $message }}
-                    </div>
-                @enderror
+            <div class="col-12 col-md-6">
+                <div class="form-group">
+                    <label for="new_password_confirmation">Konfirmasi Kata Sandi Baru</label>
+                    <input wire:model="password_confirmation" id="new_password_confirmation" type="password"
+                        class="form-control @error('password_confirmation') is-invalid @enderror"
+                        autocomplete="new-password">
+                    @error('password_confirmation')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
             </div>
         </div>
 
-        <div class="text-right">
+        <div class="text-right mt-1">
             <button type="submit" class="btn btn-warning" wire:loading.attr="disabled">
                 <span wire:loading.remove><i class="fas fa-key mr-1"></i> Perbarui Password</span>
                 <span wire:loading><i class="fas fa-spinner fa-spin mr-1"></i> Memproses...</span>

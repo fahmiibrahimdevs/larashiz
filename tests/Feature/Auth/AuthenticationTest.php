@@ -2,14 +2,15 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Livewire\Actions\Logout;
 use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Livewire\Volt\Volt;
 use Tests\TestCase;
 
 class AuthenticationTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     public function test_login_screen_can_be_rendered(): void
     {
@@ -22,7 +23,9 @@ class AuthenticationTest extends TestCase
 
     public function test_users_can_authenticate_using_the_login_screen(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create([
+            'is_active' => true,
+        ]);
 
         $component = Volt::test('pages.auth.login')
             ->set('form.email', $user->email)
@@ -34,12 +37,14 @@ class AuthenticationTest extends TestCase
             ->assertHasNoErrors()
             ->assertRedirect(route('dashboard', absolute: false));
 
-        $this->assertAuthenticated();
+        $this->assertAuthenticatedAs($user);
     }
 
     public function test_users_can_not_authenticate_with_invalid_password(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create([
+            'is_active' => true,
+        ]);
 
         $component = Volt::test('pages.auth.login')
             ->set('form.email', $user->email)
@@ -54,32 +59,29 @@ class AuthenticationTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_navigation_menu_can_be_rendered(): void
+    public function test_dashboard_can_be_rendered_for_authenticated_user(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create([
+            'is_active' => true,
+        ]);
 
-        $this->actingAs($user);
-
-        $response = $this->get('/dashboard');
+        $response = $this->actingAs($user)->get(route('dashboard'));
 
         $response
             ->assertOk()
-            ->assertSeeVolt('layout.navigation');
+            ->assertSee('Dashboard');
     }
 
     public function test_users_can_logout(): void
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create([
+            'is_active' => true,
+        ]);
 
         $this->actingAs($user);
 
-        $component = Volt::test('layout.navigation');
-
-        $component->call('logout');
-
-        $component
-            ->assertHasNoErrors()
-            ->assertRedirect('/');
+        $logout = new Logout;
+        $logout();
 
         $this->assertGuest();
     }

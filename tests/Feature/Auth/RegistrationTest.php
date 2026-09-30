@@ -2,13 +2,13 @@
 
 namespace Tests\Feature\Auth;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Livewire\Volt\Volt;
 use Tests\TestCase;
 
 class RegistrationTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     public function test_registration_screen_can_be_rendered(): void
     {
@@ -21,16 +21,20 @@ class RegistrationTest extends TestCase
 
     public function test_new_users_can_register(): void
     {
+        $email = fake()->unique()->safeEmail();
+
         $component = Volt::test('pages.auth.register')
             ->set('name', 'Test User')
-            ->set('email', 'test@example.com')
+            ->set('email', $email)
             ->set('password', 'password')
             ->set('password_confirmation', 'password');
 
-        $component->call('register');
+        $component->call('register')
+            ->assertHasNoErrors();
 
-        $component->assertRedirect(route('dashboard', absolute: false));
-
-        $this->assertAuthenticated();
+        $this->assertDatabaseHas('users', [
+            'email' => $email,
+            'is_active' => false,
+        ]);
     }
 }

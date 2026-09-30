@@ -76,28 +76,32 @@ new #[Layout('layouts.guest')] class extends Component
                 </div>
 
                 <div class="row">
-                    <div class="form-group col-12 col-md-6">
-                        <label for="password" class="d-block">Password</label>
-                        <input wire:model="password" id="password" type="password"
-                            class="form-control @error('password') is-invalid @enderror" name="password" required
-                            autocomplete="new-password">
-                        @error('password')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                        @enderror
+                    <div class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label for="password" class="d-block">Password</label>
+                            <input wire:model="password" id="password" type="password"
+                                class="form-control @error('password') is-invalid @enderror" name="password" required
+                                autocomplete="new-password">
+                            @error('password')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
                     </div>
 
-                    <div class="form-group col-12 col-md-6">
-                        <label for="password_confirmation" class="d-block">Konfirmasi Password</label>
-                        <input wire:model="password_confirmation" id="password_confirmation" type="password"
-                            class="form-control @error('password_confirmation') is-invalid @enderror"
-                            name="password_confirmation" required autocomplete="new-password">
-                        @error('password_confirmation')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                        @enderror
+                    <div class="col-12 col-md-6">
+                        <div class="form-group">
+                            <label for="password_confirmation" class="d-block">Konfirmasi Password</label>
+                            <input wire:model="password_confirmation" id="password_confirmation" type="password"
+                                class="form-control @error('password_confirmation') is-invalid @enderror"
+                                name="password_confirmation" required autocomplete="new-password">
+                            @error('password_confirmation')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
                     </div>
                 </div>
 

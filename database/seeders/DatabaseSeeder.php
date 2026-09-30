@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             LaratrustSeeder::class,
+            PostSeeder::class,
         ]);
 
         $admin = User::firstOrCreate(
