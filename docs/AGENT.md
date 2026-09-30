@@ -91,7 +91,11 @@ larashiz/
 │   ├── Feature/Auth/                            # Pengujian alur otentikasi lengkap
 │   └── Feature/ProfileTest.php                  # Pengujian update & delete profil
 └── docs/
-    └── AGENT.md                                 # Panduan ini
+    ├── AGENT.md                                 # Panduan menyeluruh sistem dan arsitektur codebase
+    ├── GENERAL_RULES.md                         # Standar Clean Architecture, Clean Code & Senior Mindset
+    ├── RULES_FRONTEND.md                        # Standar UI, Template-First, Tailwind & Mobile UX
+    ├── RULES_BACKEND.md                         # Standar DB Indexing, Transaksi, Validasi, Query Optimization
+    └── STANDARD_LOGGING.md                      # Spesifikasi lengkap Standard Logging v1.0
 ```
 
 ---
