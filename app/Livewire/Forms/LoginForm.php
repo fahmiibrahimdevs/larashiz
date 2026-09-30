@@ -2,8 +2,11 @@
 
 namespace App\Livewire\Forms;
 
+use App\Models\User;
+use App\Services\ActivityLogService;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -30,10 +33,20 @@ class LoginForm extends Form
     {
         $this->ensureIsNotRateLimited();
 
-        $user = \App\Models\User::where('email', $this->email)->first();
+        $user = User::where('email', $this->email)->first();
 
-        if (! $user || ! \Illuminate\Support\Facades\Hash::check($this->password, $user->password)) {
+        if (! $user || ! Hash::check($this->password, $user->password)) {
             RateLimiter::hit($this->throttleKey());
+
+            app(ActivityLogService::class)->warning(
+                action: 'LOGIN_FAILED',
+                module: 'auth',
+                message: 'User login failed',
+                context: [
+                    'email' => $this->email,
+                    'reason' => 'invalid_credentials',
+                ]
+            );
 
             throw ValidationException::withMessages([
                 'form.email' => trans('auth.failed'),
@@ -43,12 +56,35 @@ class LoginForm extends Form
         if (! $user->is_active) {
             RateLimiter::hit($this->throttleKey());
 
+            app(ActivityLogService::class)->warning(
+                action: 'LOGIN_BLOCKED',
+                module: 'auth',
+                message: 'User login blocked',
+                context: [
+                    'user_id' => $user->id,
+                    'email' => $this->email,
+                    'reason' => 'account_inactive',
+                ],
+                userId: $user->id
+            );
+
             throw ValidationException::withMessages([
                 'form.email' => 'Akun Anda berstatus nonaktif. Silakan hubungi admin untuk mengaktifkan akun Anda.',
             ]);
         }
 
         Auth::login($user, $this->remember);
+
+        app(ActivityLogService::class)->info(
+            action: 'LOGIN',
+            module: 'auth',
+            message: 'User logged in',
+            context: [
+                'user_id' => $user->id,
+                'email' => $user->email,
+            ],
+            userId: $user->id
+        );
 
         RateLimiter::clear($this->throttleKey());
     }
@@ -65,6 +101,16 @@ class LoginForm extends Form
         event(new Lockout(request()));
 
         $seconds = RateLimiter::availableIn($this->throttleKey());
+
+        app(ActivityLogService::class)->warning(
+            action: 'RATE_LIMIT_EXCEEDED',
+            module: 'auth',
+            message: 'User login rate limited',
+            context: [
+                'email' => $this->email,
+                'available_in_seconds' => $seconds,
+            ]
+        );
 
         throw ValidationException::withMessages([
             'form.email' => trans('auth.throttle', [
